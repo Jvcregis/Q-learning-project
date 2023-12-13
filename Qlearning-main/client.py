@@ -15,7 +15,7 @@ def choose_action(Q_table, current_state, eps):
     # Exploration: escolhe ação aleatoriamente
     if np.random.rand() < eps: # Gera um número aleatório entre 0 e 1 e verifica se é menor que epsilon
         action = np.random.choice(len(Q_table[current_state]))
-    # Exploration: escolhe a ação com o maior valor conhecido da Q_table
+    # Exploitation: escolhe a ação com o maior valor conhecido da Q_table
     else:
         action = np.argmax(Q_table[current_state])
     return action
