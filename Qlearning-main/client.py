@@ -3,14 +3,13 @@ import connection as cn
 import numpy as np
 import random as rd
 # Número de estados e ações
-num_estados = 96
-num_acoes = 3
+
 
 # Inicialização da tabela Q com zeros
 #q_table = np.zeros((num_estados, num_acoes))
 
 s = cn.connect(2037)
-q_table = np.loadtxt('resultado.txt')
+q_table = np.loadtxt(r'C:\Users\Windows\Downloads\Q-learning-project\Qlearning-main\result.txt')
 np.set_printoptions(precision = 6)
 
 
@@ -18,9 +17,13 @@ np.set_printoptions(precision = 6)
 
 def choose_action(state,epsilon,actions):
     if rd.random() < epsilon:
-        action = actions[rd.randit(0,2)]
+        action = actions[rd.randint(0,2)]
+        print(f'Ação aleatória escolhida para o estado {curr_state}: {action}')
+
     else:
+        state = int(state)
         action = np.argmax(q_table[state, :])
+        print(f'Melhor ação escolhida para o estado {curr_state}: {action}')
     return action
 
 def bellman_equation( r, s_prime, gamma):
@@ -39,7 +42,7 @@ def bellman_equation( r, s_prime, gamma):
 
 
 
-curr_state = 0.1
+curr_state = 0
 curr_reward = -14
 actions = ["left","right","jump"]
 alpha = 0.01
@@ -47,7 +50,7 @@ gamma = 0.5
 #estado, recompensa = cn.get_state_reward(s,"jump")
 
 while True:
-    action = choose_action(curr_state,0,actions)
+    action = choose_action(curr_state,1,actions)
     
     if action == "left":
         col_action = 0
@@ -61,11 +64,12 @@ while True:
 
     state = int(state,2)
     next_state = state
-
-    q_table[curr_state][col_action] = q_table[curr_state][col_action] + alpha*(bellman_equation(reward,next_state,gamma)) - q_table[curr_state][col_action]
     
+    print(f'valor anterior dessa ação: {q_table[curr_state][col_action]}')
+    q_table[curr_state][col_action] = q_table[curr_state][col_action] + alpha*(bellman_equation(curr_reward,next_state,gamma)) - q_table[curr_state][col_action]
+    #print(f'valor novo dessa ação: {q_table[curr_state][action] + alpha*(bellman_equation(reward, curr_reward,gamma) - q_table[curr_state][action])}')
 
     curr_state = next_state
     curr_reward = reward
 
-    np.savetxt('resultado.txt', q_table, fmt="%f")
+    np.savetxt(r'C:\Users\Windows\Downloads\Q-learning-project\Qlearning-main\result.txt', q_table, fmt="%f")
