@@ -9,7 +9,7 @@ import random as rd
 #q_table = np.zeros((num_estados, num_acoes))
 
 s = cn.connect(2037)
-q_table = np.loadtxt(r'C:\Users\Windows\Downloads\Q-learning-project\Qlearning-main\result.txt')
+q_table = np.loadtxt(r'D:\João\FACULDADE\Q-learning-project\Qlearning-main\result.txt')
 np.set_printoptions(precision = 6)
 
 
@@ -46,12 +46,12 @@ def bellman_equation( r, s_prime, gamma):
 curr_state = 0
 curr_reward = -14
 actions = ["left","right","jump"]
-alpha = 0.01
-gamma = 0.5
+alpha = 0.1
+gamma = 0.99
 #estado, recompensa = cn.get_state_reward(s,"jump")
 
 while True:
-    action = choose_action(curr_state,0.1,actions)
+    action = choose_action(curr_state,0.3,actions)
     print(f'a')
     if action == "left":
         col_action = 0
@@ -73,4 +73,4 @@ while True:
     curr_state = next_state
     curr_reward = reward
 
-    np.savetxt(r'C:\Users\Windows\Downloads\Q-learning-project\Qlearning-main\result.txt', q_table, fmt="%f")
+    np.savetxt(r'D:\João\FACULDADE\Q-learning-project\Qlearning-main\result.txt', q_table, fmt="%f")
