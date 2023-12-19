@@ -21,8 +21,9 @@ def choose_action(state,epsilon,actions):
         print(f'Ação aleatória escolhida para o estado {curr_state}: {action}')
 
     else:
-        state = int(state)
-        action = np.argmax(q_table[state, :])
+        #state = int(state)
+        number = np.argmax(q_table[curr_state, :])
+        action = actions[number]
         print(f'Melhor ação escolhida para o estado {curr_state}: {action}')
     return action
 
@@ -50,15 +51,15 @@ gamma = 0.5
 #estado, recompensa = cn.get_state_reward(s,"jump")
 
 while True:
-    action = choose_action(curr_state,1,actions)
-    
+    action = choose_action(curr_state,0.1,actions)
+    print(f'a')
     if action == "left":
         col_action = 0
     elif action == "right":
         col_action = 1
     else:
         col_action = 2
-    
+    print(action)
     state,reward = cn.get_state_reward(s,action)
     state = state[2:]
 
