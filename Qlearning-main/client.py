@@ -22,7 +22,7 @@ def choose_action(state,epsilon,actions):
 
     else:
         #state = int(state)
-        number = np.argmax(q_table[curr_state, :])
+        number = np.argmax(q_table[curr_state])
         action = actions[number]
         print(f'Melhor ação escolhida para o estado {curr_state}: {action}')
     return action
@@ -36,7 +36,7 @@ def bellman_equation( r, s_prime, gamma):
     s_prime: next state
     gamma: discount factor
     """
-    max_q_prime = np.max(q_table[s_prime, :])
+    max_q_prime = np.max(q_table[s_prime])
     pontos = r + gamma * max_q_prime
     return pontos
 
@@ -46,12 +46,14 @@ def bellman_equation( r, s_prime, gamma):
 curr_state = 0
 curr_reward = -14
 actions = ["left","right","jump"]
-alpha = 0.01
+alpha = 0.25
 gamma = 0.5
 #estado, recompensa = cn.get_state_reward(s,"jump")
-
+var = 0
 while True:
-    action = choose_action(curr_state,0.1,actions)
+    
+    action = choose_action(curr_state,var,actions)
+    
     print(f'a')
     if action == "left":
         col_action = 0
