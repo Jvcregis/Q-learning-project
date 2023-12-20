@@ -11,6 +11,7 @@ import random as rd
 s = cn.connect(2037)
 q_table = np.loadtxt(r'D:\João\FACULDADE\Q-learning-project\Qlearning-main\result.txt')
 np.set_printoptions(precision = 6)
+q_table.fill(0)
 
 
 
@@ -51,7 +52,7 @@ gamma = 0.99
 #estado, recompensa = cn.get_state_reward(s,"jump")
 
 while True:
-    action = choose_action(curr_state,0.3,actions)
+    action = choose_action(curr_state,0.4,actions)
     print(f'a')
     if action == "left":
         col_action = 0
