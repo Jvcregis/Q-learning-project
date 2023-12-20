@@ -53,7 +53,8 @@ epslon = 1
 while True:
     
     action = choose_action(curr_state,epslon,actions)
-    epslon -= 0.0001
+    if epslon > 0.4:
+        epslon -= 0.0001
     print(f'epslon: {epslon}')
     if action == "left":
         col_action = 0
@@ -63,13 +64,14 @@ while True:
         col_action = 2
     print(action)
     state,reward = cn.get_state_reward(s,action)
+    print(reward)
     state = state[2:]
 
     state = int(state,2)
     next_state = state
     
     print(f'valor anterior dessa ação: {q_table[curr_state][col_action]}')
-    q_table[curr_state][col_action] = q_table[curr_state][col_action] + alpha*(bellman_equation(curr_reward,next_state,gamma) - q_table[curr_state][col_action])
+    q_table[curr_state][col_action] = q_table[curr_state][col_action] + alpha*(bellman_equation(reward,next_state,gamma) - q_table[curr_state][col_action])
     #print(f'valor novo dessa ação: {q_table[curr_state][action] + alpha*(bellman_equation(reward, curr_reward,gamma) - q_table[curr_state][action])}')
 
     curr_state = next_state
