@@ -1,38 +1,72 @@
-#Aqui vocês irão colocar seu algoritmo de aprendizado
 import connection as cn
 import numpy as np
+import random as rd
 
-socket = cn.connect(2037)
+s = cn.connect(2037)
+q_table = np.loadtxt(r'D:\João\FACULDADE\Q-learning-project\Qlearning-main\result.txt')
+np.set_printoptions(precision = 6)
 
-# Número de estados e ações
-num_estados = 96
-num_acoes = 3
 
-# Inicialização da tabela Q com zeros
-q_table = np.zeros((num_estados, num_acoes))
+def choose_action(epsilon,actions):
+    if rd.random() < epsilon:
+        action = actions[rd.randint(0,2)]
+        print(f'Ação aleatória escolhida para o estado {curr_state}: {action}')
 
-def choose_action(Q_table, current_state, eps):
-    # Exploration: escolhe ação aleatoriamente
-    if np.random.rand() < eps: # Gera um número aleatório entre 0 e 1 e verifica se é menor que epsilon
-        action = np.random.choice(len(Q_table[current_state]))
-    # Exploitation: escolhe a ação com o maior valor conhecido da Q_table
     else:
-        action = np.argmax(Q_table[current_state])
+        number = np.argmax(q_table[curr_state])
+        action = actions[number]
+        print(f'Melhor ação escolhida para o estado {curr_state}: {action}')
     return action
 
-# Estado inicial
-estado = "0b0000000"
+def bellman_equation( r, s_prime, gamma):
+    """
+    Q: Q-values matrix
+    s: current state
+    a: chosen action
+    r: reward for the action
+    s_prime: next state
+    gamma: discount factor
+    """
+    max_q_prime = np.max(q_table[s_prime])
+    pontos = r + gamma * max_q_prime
+    return pontos
 
-# Parâmetros
-alpha = 0.5
-gamma = 1 - alpha
 
+
+
+curr_state = 0
+curr_reward = -14
+actions = ["left","right","jump"]
+alpha = 0
+gamma = 0.99
+epslon = 0
 while True:
-    acao = choose_action(estado)
-    novo_estado, recompensa = cn.get_state_reward(socket, acao)
-    current_q = q_table[estado, acao] # Arrumar esses índices com uma função de transição
-    max_next_q = np.max(q_table[novo_estado, :])
-    novo_q = current_q + alpha * (recompensa + gamma * max_next_q - current_q)
-    q_table[estado, acao] = novo_q
+    
+    action = choose_action(epslon,actions)
 
-    estado = novo_estado
+    # Imprimindo epsilon ao longo das execuções
+    if epslon > 0.4:
+        epslon -= 0.0001
+    print(f'epslon: {epslon}')
+
+    if action == "left":
+        col_action = 0
+    elif action == "right":
+        col_action = 1
+    else:
+        col_action = 2
+    print(action)
+    state,reward = cn.get_state_reward(s,action)
+    print(reward)
+    state = state[2:]
+
+    state = int(state,2)
+    next_state = state
+    
+    print(f'valor anterior dessa ação: {q_table[curr_state][col_action]}')
+    q_table[curr_state][col_action] = q_table[curr_state][col_action] + alpha*(bellman_equation(reward,next_state,gamma) - q_table[curr_state][col_action])
+
+    curr_state = next_state
+    curr_reward = reward
+
+    np.savetxt(r'D:\João\FACULDADE\Q-learning-project\Qlearning-main\result.txt', q_table, fmt="%f")
