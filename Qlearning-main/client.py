@@ -52,7 +52,7 @@ gamma = 0.99
 #estado, recompensa = cn.get_state_reward(s,"jump")
 
 while True:
-    action = choose_action(curr_state,0.4,actions)
+    action = choose_action(curr_state,0.2,actions)
     print(f'a')
     if action == "left":
         col_action = 0
