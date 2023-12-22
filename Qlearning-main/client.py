@@ -3,10 +3,11 @@ import numpy as np
 import random as rd
 
 s = cn.connect(2037)
-q_table = np.loadtxt(r'D:\João\FACULDADE\Q-learning-project\Qlearning-main\result.txt')
+#Deverá colocar o path para o result.txt do seu computador
+q_table = np.loadtxt(r'C:\Users\Windows\Downloads\Q-learning-project-1\Qlearning-main\resultado.txt')
 np.set_printoptions(precision = 6)
 
-
+#Define, de acordo com uma constante epsilon, se ele realizará uma ação aleatória ou a melhor ação possível, retorna tal ação
 def choose_action(epsilon,actions):
     if rd.random() < epsilon:
         action = actions[rd.randint(0,2)]
@@ -19,14 +20,7 @@ def choose_action(epsilon,actions):
     return action
 
 def bellman_equation( r, s_prime, gamma):
-    """
-    Q: Q-values matrix
-    s: current state
-    a: chosen action
-    r: reward for the action
-    s_prime: next state
-    gamma: discount factor
-    """
+    
     max_q_prime = np.max(q_table[s_prime])
     pontos = r + gamma * max_q_prime
     return pontos
@@ -68,5 +62,5 @@ while True:
 
     curr_state = next_state
     curr_reward = reward
-
-    np.savetxt(r'D:\João\FACULDADE\Q-learning-project\Qlearning-main\result.txt', q_table, fmt="%f")
+    #Deverá colocar o path para o result.txt do seu computador
+    np.savetxt(r'C:\Users\Windows\Downloads\Q-learning-project-1\Qlearning-main\resultado.txt', q_table, fmt="%f")
